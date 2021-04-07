@@ -1,5 +1,6 @@
 package com.endava.internship.mocking.model;
 
+import java.util.List;
 import java.util.Objects;
 
 public class User {
@@ -7,11 +8,16 @@ public class User {
     private Integer id;
     private String name;
     private Status status;
+    private List<Privilege> privileges;
 
     public User(Integer id, String name, Status status) {
         this.id = id;
         this.name = name;
         this.status = status;
+    }
+
+    public List<Privilege> getPrivileges() {
+        return privileges;
     }
 
     public Integer getId() {

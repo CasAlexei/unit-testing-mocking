@@ -12,6 +12,5 @@ public interface PaymentRepository {
     List<Payment> findAll();
 
     Payment save(Payment payment);
-
     Payment editMessage(UUID paymentId, String message);
 }

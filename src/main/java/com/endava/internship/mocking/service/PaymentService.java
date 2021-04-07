@@ -1,14 +1,16 @@
 package com.endava.internship.mocking.service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.endava.internship.mocking.model.Payment;
+import com.endava.internship.mocking.model.Privilege;
 import com.endava.internship.mocking.model.User;
 import com.endava.internship.mocking.repository.PaymentRepository;
 import com.endava.internship.mocking.repository.UserRepository;
+
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.mapping;
 
 public class PaymentService {
 
@@ -48,5 +50,20 @@ public class PaymentService {
             .stream()
             .filter(payment -> payment.getAmount() > amount)
             .collect(Collectors.toList());
+    }
+
+    public Map<Privilege, List<User>> groupBy(List<Integer> userIds) {
+
+        List<User> users = userIds.stream().map(userRepository::findById).map(Optional::get).collect(Collectors.toList());
+        return users.stream()
+            .flatMap(user -> user.getPrivileges().stream().map(privilege ->
+                {
+                    Map<Privilege, User> map = new HashMap<>();
+                    map.put(privilege, user);
+                    return map.entrySet();
+                }
+            ))
+            .flatMap(Set::stream)
+            .collect(groupingBy(Map.Entry::getKey, mapping(Map.Entry::getValue, Collectors.toList())));
     }
 }
