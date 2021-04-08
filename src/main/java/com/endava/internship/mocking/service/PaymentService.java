@@ -55,6 +55,7 @@ public class PaymentService {
     public Map<Privilege, List<User>> groupBy(List<Integer> userIds) {
 
         List<User> users = userIds.stream().map(userRepository::findById).map(Optional::get).collect(Collectors.toList());
+
         return users.stream()
             .flatMap(user -> user.getPrivileges().stream().map(privilege ->
                 {

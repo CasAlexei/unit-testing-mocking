@@ -13,6 +13,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.endava.internship.mocking.model.Payment;
+import com.endava.internship.mocking.model.Privilege;
+import com.endava.internship.mocking.model.User;
 
 public class InMemPaymentRepository implements PaymentRepository {
 
@@ -64,4 +66,5 @@ public class InMemPaymentRepository implements PaymentRepository {
         payment.setMessage(message);
         return Payment.copyOf(payment);
     }
+
 }

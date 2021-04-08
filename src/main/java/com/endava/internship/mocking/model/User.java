@@ -10,10 +10,11 @@ public class User {
     private Status status;
     private List<Privilege> privileges;
 
-    public User(Integer id, String name, Status status) {
+    public User(Integer id, String name, Status status, List<Privilege> privileges) {
         this.id = id;
         this.name = name;
         this.status = status;
+        this.privileges = privileges;
     }
 
     public List<Privilege> getPrivileges() {
@@ -61,5 +62,14 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, status);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", status=" + status +
+                '}';
     }
 }

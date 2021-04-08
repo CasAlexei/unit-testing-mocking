@@ -1,6 +1,7 @@
 package com.endava.internship.mocking.service;
 
 import com.endava.internship.mocking.model.Payment;
+import com.endava.internship.mocking.model.Privilege;
 import com.endava.internship.mocking.model.Status;
 import com.endava.internship.mocking.model.User;
 import com.endava.internship.mocking.repository.PaymentRepository;
@@ -14,10 +15,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -42,9 +43,7 @@ class PaymentServiceTest {
 
     @Test
     void createPayment() {
-        User user = new User(1, "Alex", Status.ACTIVE);
-
-        //when(userRepository.findById(1)).thenReturn(Optional.of(user));
+        User user = new User(1, "Alex", Status.ACTIVE, singletonList(Privilege.DELETE));
 
         ArgumentCaptor<Payment> captor = ArgumentCaptor.forClass(Payment.class);
         tested.createPayment(1, 10.0);
@@ -87,5 +86,29 @@ class PaymentServiceTest {
         List<Payment> listPayment = tested.getAllByAmountExceeding(5.0);
 
         assertThat(listPayment).containsExactlyInAnyOrder(payment, payment1);
+    }
+
+    @Test
+    void testGroupBy(){
+        User user1 = new User(1, "Alex", Status.ACTIVE, asList(Privilege.UPDATE, Privilege.CREATE, Privilege.DELETE));
+        User user2 = new User(2, "Tatiana", Status.INACTIVE, asList(Privilege.UPDATE, Privilege.DELETE));
+        User user3 = new User(3, "Petr", Status.ACTIVE, singletonList(Privilege.DELETE));
+
+        List<Integer> userIdsForTest = asList(1, 2, 3);
+
+        Map<Privilege, List<User>> resultMap = new HashMap<>();
+        resultMap.put(Privilege.CREATE, singletonList(user1));
+        resultMap.put(Privilege.UPDATE, asList(user1, user2));
+        resultMap.put(Privilege.DELETE, asList(user1, user2, user3));
+
+
+
+        when(userRepository.findById(1)).thenReturn(Optional.of(user1));
+        when(userRepository.findById(2)).thenReturn(Optional.of(user2));
+        when(userRepository.findById(3)).thenReturn(Optional.of(user3));
+
+        Map<Privilege, List<User>> mapFromService =  tested.groupBy(userIdsForTest);
+
+        assertThat(mapFromService).containsAllEntriesOf(resultMap);
     }
 }

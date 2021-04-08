@@ -4,8 +4,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import com.endava.internship.mocking.model.Privilege;
 import com.endava.internship.mocking.model.Status;
 import com.endava.internship.mocking.model.User;
+
+import static java.util.Collections.singletonList;
 
 public class InMemUserRepository implements UserRepository {
 
@@ -13,11 +16,11 @@ public class InMemUserRepository implements UserRepository {
 
     public InMemUserRepository() {
         userList = Arrays.asList(
-            new User(1, "John", Status.ACTIVE),
-            new User(2, "Maria", Status.ACTIVE),
-            new User(3, "Peter", Status.INACTIVE),
-            new User(4, "Anna", Status.ACTIVE),
-            new User(5, "David", Status.INACTIVE));
+            new User(1, "John", Status.ACTIVE, singletonList(Privilege.DELETE)),
+            new User(2, "Maria", Status.ACTIVE, singletonList(Privilege.DELETE)),
+            new User(3, "Peter", Status.INACTIVE, singletonList(Privilege.DELETE)),
+            new User(4, "Anna", Status.ACTIVE, singletonList(Privilege.DELETE)),
+            new User(5, "David", Status.INACTIVE, singletonList(Privilege.DELETE)));
     }
 
     @Override
